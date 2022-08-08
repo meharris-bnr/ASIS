@@ -1,0 +1,59 @@
+
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.springframework.boot' version '2.7.2'
+}
+
+group = 'com.lostsidewalk'
+version = '0.4-dev3'
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        name = "GitHubPackages_1"
+        url = uri("https://maven.pkg.github.com/meharris-bnr/skyproc")
+        credentials {
+            username = project.findProperty("repo.user") ?: System.getenv("SKYPROC_REPO_USER")
+            password = project.findProperty("repo.token") ?: System.getenv("SKYPROC_REPO_TOKEN")
+        }
+    }
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/meharris-bnr/lev")
+        credentials {
+            username = project.findProperty("repo.user") ?: System.getenv("SKYPROC_REPO_USER")
+            password = project.findProperty("repo.token") ?: System.getenv("SKYPROC_REPO_TOKEN")
+        }
+    }
+}
+
+dependencies {
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava:31.1-jre'
+
+    implementation 'com.lostsidewalk:skyproc-starter:0.4-dev3'
+
+    implementation 'org.ini4j:ini4j:0.5.4'
+
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.24'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+}
+
+application {
+    mainClassName = 'skyprocstarter.SkyProcStarter'
+}
+
+test {
+    useJUnitPlatform()
+}
