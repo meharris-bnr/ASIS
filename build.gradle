@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.lostsidewalk'
-version = '0.4-dev3'
+version = '0.4-dev4'
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
@@ -35,7 +35,7 @@ dependencies {
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:31.1-jre'
 
-    implementation 'com.lostsidewalk:skyproc-starter:0.4-dev3'
+    implementation 'com.lostsidewalk:skyproc-starter:0.4-dev4'
 
     implementation 'org.ini4j:ini4j:0.5.4'
 
