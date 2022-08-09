@@ -2,6 +2,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'maven-publish'
     id 'org.springframework.boot' version '2.7.2'
 }
 
@@ -135,3 +136,22 @@ task modDist {
     dependsOn cleanModDist
     dependsOn setupModDist_zipArtifact
 }
+
+publishing {
+    repositories {
+        maven {
+            name = 'GitHubPackages'
+            url = uri("https://maven.pkg.github.com/meharris-bnr/ASIS")
+            credentials {
+                username = project.findProperty("publishing.user") ?: System.getenv("ASIS_PUBLISHING_USER")
+                password = project.findProperty("publishing.token") ?: System.getenv("ASIS_PUBLISHING_TOKEN")
+            }
+        }
+    }
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
+    }
+}
+
