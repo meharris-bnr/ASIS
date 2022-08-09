@@ -1,0 +1,8 @@
+==MOD BLOCKS==
+//
+// This file defines the names of mods to skip during the SkyProc data import process.
+//
+// Mods with names containing any of the following keywords are bypassed during the import process.
+//
+// Keywords should appear one per line.
+//

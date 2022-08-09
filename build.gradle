@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.lostsidewalk'
-version = '0.4-dev4'
+version = '0.4-dev5'
 sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
@@ -35,7 +35,7 @@ dependencies {
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:31.1-jre'
 
-    implementation 'com.lostsidewalk:skyproc-starter:0.4-dev4'
+    implementation 'com.lostsidewalk:skyproc-starter:0.4-dev5'
 
     implementation 'org.ini4j:ini4j:0.5.4'
 
@@ -56,4 +56,82 @@ application {
 
 test {
     useJUnitPlatform()
+}
+
+task cleanModDist(type: Delete) {
+    delete 'mod_dist'
+}
+
+task setupModDist_Interface (type: Copy) {
+    from("Data/Interface")
+    include "**/*"
+    destinationDir file("mod_dist/data/Interface")
+}
+
+task setupModDist_Scripts(type: Copy) {
+    from ("Data/Scripts")
+    include "**/*"
+    destinationDir file("mod_dist/data/Scripts")
+}
+
+task setupModDist_SkyProc_BlockList(type: Copy) {
+    from (".")
+    include "BlockList.txt"
+    destinationDir file("mod_dist/data/SkyProc Patchers/ASIS/Files")
+}
+
+task setupModDist_SkyProc_TweakInis(type: Copy) {
+    from ("TweakInis")
+    include "**/*"
+    destinationDir file("mod_dist/data/SkyProc Patchers/ASIS/TweakInis")
+}
+
+task setupModDist_SkyProc_Patcher_Support(type: Copy) {
+    from (".")
+    include "ASIS.bat", "ASIS.ini", "AutomaticPerks.ini", "AutomaticSpells.ini", "customizedAI.ini",
+            "customizedGMSTs.ini", "IncreasedSpawns.ini", "NPCEnchantFix.ini", "NPCPotions.ini", "RandomSpawns.ini"
+    destinationDir file("mod_dist/data/SkyProc Patchers/ASIS")
+}
+
+task setupModDist_SkyProc_Patcher_Jar(type: Copy) {
+    dependsOn build
+    from ("build/libs")
+    include "asis-${project.version}.jar"
+    destinationDir file("mod_dist/data/SkyProc Patchers/ASIS")
+    rename "asis-${project.version}.jar", "asis.jar"
+}
+
+task setupModDist_ASIS_DependencyPlugin(type: Copy) {
+    from ("Data")
+    include "ASIS-Dependency.esp"
+    destinationDir file("mod_dist/data")
+}
+
+// TODO: fix this
+task setupModDist_ASIS_EmptyPlugin(type: Copy) {
+    from("Data")
+    include "ASIS-Dependency.esp"
+    destinationDir file("mod_dist/data")
+    rename "ASIS-Dependency.esp", "ASIS.esp"
+}
+
+task setupModDist_zipArtifact(type: Zip) {
+    dependsOn setupModDist_Interface
+    dependsOn setupModDist_Scripts
+    dependsOn setupModDist_SkyProc_BlockList
+    dependsOn setupModDist_SkyProc_TweakInis
+    dependsOn setupModDist_SkyProc_Patcher_Support
+    dependsOn setupModDist_SkyProc_Patcher_Jar
+    dependsOn setupModDist_ASIS_DependencyPlugin
+    dependsOn setupModDist_ASIS_EmptyPlugin
+
+    from "mod_dist"
+    include "data/**"
+    archiveName "ASIS SEE-10859-0-4-0.zip"
+    destinationDir(file("mod_dist/"))
+}
+
+task modDist {
+    dependsOn cleanModDist
+    dependsOn setupModDist_zipArtifact
 }
